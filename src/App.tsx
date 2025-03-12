@@ -8,6 +8,7 @@ import TestPage from "./pages/TestPage";
 import ResultsPage from "./pages/ResultsPage";
 import Footer from "./components/Footer";
 
+
 const App = () => {
   return (
     <div>
@@ -15,7 +16,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/tests" element={<Tests />} />
-        <Route path="/tests/:id" element={<TestPage />} />
+        <Route path="/tests/:testType" element={<TestPage />} />
         <Route path="/results" element={<ResultsPage />} />
         <Route path="/contacts" element={<Contacts />} />
         <Route path="*" element={<NotFound />} />

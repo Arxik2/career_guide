@@ -1,58 +1,40 @@
-export type Question = {
-  id: number;
+// src/data/testData.ts
+
+import { hollandQuestions, calculateHollandResult } from "./hollandTest";
+
+// Интерфейс для структуры ответов пользователя
+export interface StoredAnswers {
+  [testId: string]: Record<number, string>;
+}
+
+// Тип для структуры вопроса
+export interface Question {
   question: string;
   options: string[];
-};
+}
 
-export type Test = {
+// Тип для теста
+export interface Test {
+  id: string;
   title: string;
   questions: Question[];
-};
+}
 
-export const testData: Record<number, Test> = {
-  1: {
-    title: "Тест на выбор профессии",
+// Данные для всех тестов
+export const testData: Test[] = [
+  {
+    id: "holland",
+    title: "Тест Холланда (RIASEC)",
+    questions: hollandQuestions,
+  },
+  {
+    id: "example",
+    title: "Примерный тест",
     questions: [
-      {
-        id: 1,
-        question: "Что вам нравится больше всего?",
-        options: ["Работать с людьми", "Анализировать данные", "Создавать что-то новое"],
-      },
-      {
-        id: 2,
-        question: "Какие задачи вам приятнее выполнять?",
-        options: ["Решать конфликты", "Изучать сложные темы", "Дизайн и творчество"],
-      },
+      { question: "Вы любите программировать?", options: ["Да", "Нет"] },
+      { question: "Вам нравится работать в команде?", options: ["Да", "Нет"] },
     ],
   },
-  2: {
-    title: "Тест на личностные качества",
-    questions: [
-      {
-        id: 1,
-        question: "Как вы реагируете на стресс?",
-        options: ["Ищу поддержку у друзей", "Погружаюсь в работу", "Занимаюсь творчеством"],
-      },
-      {
-        id: 2,
-        question: "Что для вас важнее в работе?",
-        options: ["Комфортный коллектив", "Профессиональный рост", "Свобода и креативность"],
-      },
-    ],
-  },
-  3: {
-    title: "Тест на когнитивные способности",
-    questions: [
-      {
-        id: 1,
-        question: "Как вы решаете логические задачи?",
-        options: ["Шаг за шагом", "Интуитивно", "Методом проб и ошибок"],
-      },
-      {
-        id: 2,
-        question: "Насколько легко вам даются новые знания?",
-        options: ["Очень легко", "Средне", "Трудно"],
-      },
-    ],
-  },
-};
+];
+
+export { calculateHollandResult };

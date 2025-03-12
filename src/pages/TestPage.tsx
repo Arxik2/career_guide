@@ -1,71 +1,85 @@
-import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { testData } from "../data/testData";
+import { useParams, useNavigate } from "react-router-dom";
+import { testData, Test } from "../data/testData";
 
 const TestPage = () => {
-  const { id } = useParams<{ id?: string }>();
+  const { testType } = useParams<{ testType: string }>();
   const navigate = useNavigate();
+  const currentTest: Test | undefined = testData.find((test) => test.id === testType);
 
-  const test = id ? testData[Number(id)] : undefined;
-
-  const [answers, setAnswers] = useState<Record<string, Record<number, string>>>(() => {
-    const savedAnswers = localStorage.getItem("answers");
-    return savedAnswers ? JSON.parse(savedAnswers) : {};
-  });
+  const [answers, setAnswers] = useState<Record<number, string>>({});
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [isComplete, setIsComplete] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem("answers", JSON.stringify(answers));
-  }, [answers]);
+    if (testType) {
+      const savedAnswers = localStorage.getItem(`answers_${testType}`);
+      if (savedAnswers) {
+        setAnswers(JSON.parse(savedAnswers));
+      }
+    }
+  }, [testType]);
 
-  if (!test) return <h1 className="text-3xl text-red-500">Тест не найден</h1>;
+  useEffect(() => {
+    if (testType) {
+      localStorage.setItem(`answers_${testType}`, JSON.stringify(answers));
+    }
+  }, [answers, testType]);
 
-  const handleAnswer = (questionId: number, option: string) => {
-    setAnswers((prev) => ({
-      ...prev,
-      [id as string]: { ...prev[id as string], [questionId]: option },
-    }));
+  if (!currentTest) return <p>Тест не найден.</p>;
+
+  const handleAnswer = (answer: string) => {
+    setAnswers((prev) => ({ ...prev, [currentQuestion]: answer }));
+    if (currentQuestion < currentTest.questions.length - 1) {
+      setCurrentQuestion((prev) => prev + 1);
+    } else {
+      setIsComplete(true);
+    }
   };
 
-  const handleSubmit = () => {
+  const handleNextTest = () => {
     navigate("/results");
   };
 
-  return (
-    <main className="p-8">
-      <h1 className="text-4xl font-bold mb-8 text-blue-600">{test.title}</h1>
+  const progress = ((currentQuestion + 1) / currentTest.questions.length) * 100;
 
-      {test.questions.map((q) => (
-        <div key={q.id} className="mb-8">
-          <p className="text-xl font-semibold mb-4">{q.question}</p>
-          <div className="space-y-3">
-            {q.options.map((option) => (
-              <label key={option} className="flex items-center space-x-3 cursor-pointer">
-                <input
-                  type="radio"
-                  name={`question-${q.id}`}
-                  value={option}
-                  onChange={() => handleAnswer(q.id, option)}
-                  className="hidden"
-                />
-                <span
-                  className={`px-6 py-3 rounded-xl transition ${
-                    answers[id as string]?.[q.id] === option ? "bg-blue-500 text-white" : "bg-gray-200"
-                  }`}
-                >
-                  {option}
-                </span>
-              </label>
+  return (
+    <main className="p-8 max-w-4xl mx-auto animate-fade-in">
+      <h1 className="text-3xl font-bold mb-6">{currentTest.title}</h1>
+
+      <div className="mb-4 bg-gray-200 rounded-full h-4">
+        <div
+          className="bg-blue-600 h-4 rounded-full transition-all"
+          style={{ width: `${progress}%` }}
+        ></div>
+      </div>
+
+      {isComplete ? (
+        <div className="text-center">
+          <p className="text-xl mb-6">Тест завершён!</p>
+          <button
+            onClick={handleNextTest}
+            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-transform transform hover:scale-105"
+          >
+            Перейти к результатам
+          </button>
+        </div>
+      ) : (
+        <>
+          <p className="text-xl mb-4">{currentTest.questions[currentQuestion].question}</p>
+          <div className="flex flex-col gap-4">
+            {currentTest.questions[currentQuestion].options.map((option, index) => (
+              <button
+                key={index}
+                onClick={() => handleAnswer(option)}
+                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-transform transform hover:scale-105"
+              >
+                {option}
+              </button>
             ))}
           </div>
-        </div>
-      ))}
-
-      <button
-        onClick={handleSubmit}
-        className="mt-8 px-8 py-4 bg-blue-600 text-white font-semibold rounded-full hover:bg-blue-700 transition-shadow shadow-lg"
-      >
-        ✅ Завершить тест
-      </button>
+        </>
+      )}
     </main>
   );
 };
