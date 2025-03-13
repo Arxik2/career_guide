@@ -62,6 +62,7 @@ const Diagram = () => {
                       boxWidth: 20,
                       padding: 20,
                       font: { size: 20 },
+                      color: '#FFFFFF'
                     },
                   },
                 },

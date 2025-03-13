@@ -1,12 +1,10 @@
 // src/components/Header.tsx
 import { Link } from "react-router-dom";
-import ThemeToggle from "./ThemeToggle";
-
 const Header = () => {
   return (
     <header className="bg-gray-900 text-white p-6 shadow-md">
       <nav className="flex justify-between items-center max-w-7xl mx-auto">
-        <Link to="/" className="text-2xl font-bold">
+        <Link to="/" className="text-3xl font-bold">
           Career Guide
         </Link>
 
@@ -22,8 +20,7 @@ const Header = () => {
             <Link to="/contacts" className="hover:underline">Контакты</Link>
           </li>
         </ul>
-        {/* Переключатель темы */}
-        <ThemeToggle />
+      
       </nav>
     </header>
   );

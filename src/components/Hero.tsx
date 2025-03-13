@@ -22,7 +22,7 @@ const Hero = () => (
       </p>
       <Link
         to="/tests"
-        className="px-10 py-4 bg-gray-700 rounded-xl hover:bg-blue-700 transition-transform transform hover:scale-110 animate-pulse"
+        className="px-10 py-4 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 inline-block rounded-xl  transition-transform transform hover:scale-110 "
       >
         Начать тест
       </Link>

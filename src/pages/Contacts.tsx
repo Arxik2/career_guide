@@ -1,7 +1,7 @@
 // src/pages/Contacts.tsx
 import { useState } from "react";
 import { FaTelegramPlane, FaWhatsapp, FaInstagram } from "react-icons/fa";
-import { Helmet } from "react-helmet-async";
+
 
 const Contacts = () => {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
@@ -18,13 +18,7 @@ const Contacts = () => {
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-blue-50 to-blue-100 p-8">
-      <Helmet>
-        <title>Контакты | Платформа профориентации</title>
-        <meta name="description" content="Свяжитесь с нами для получения дополнительной информации о тестах и консультации." />
-        <link rel="canonical" href="https://yourdomain.com/contact" />
-        <meta property="og:title" content="Контакты | Платформа профориентации" />
-        <meta property="og:description" content="Свяжитесь с нашей командой для помощи и поддержки." />
-      </Helmet>
+  
       <h1 className="text-5xl font-bold text-blue-600 mb-16 text-center animate-fade-in">
         Свяжитесь с нами
       </h1>
